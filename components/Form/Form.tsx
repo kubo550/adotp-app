@@ -26,6 +26,7 @@ const Form: React.FC<FormProps> = ({ handleCloseForm }) => {
   const methods = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
+
     // @ts-ignore
     defaultValues: {
       name: "",
