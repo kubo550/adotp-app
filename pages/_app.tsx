@@ -2,7 +2,6 @@ import { AnimatePresence } from "framer-motion";
 import { Router } from "next/dist/client/router";
 
 import NProgress from "nprogress";
-
 import "../styles/globals.scss";
 import "nprogress/nprogress.css";
 
