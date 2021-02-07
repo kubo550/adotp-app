@@ -11,6 +11,7 @@ export const FormWrapper = styled.div`
     align-items: center;
     background-color: rgba(0, 0, 0, 0.4);
 `;
+
 export const StyledPaperForm = styled(Paper)`
     max-width: 500px;
     padding: 40px;
