@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/adopt
+Content-Type: application/json
+
+{
+    "email": "kubo550@wp.pl",
+    "name": "kubus"
+}
+
+###
+ 
