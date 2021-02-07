@@ -14,6 +14,7 @@ const About = () => {
       <Head>
         <title> Become a Hero</title>
       </Head>
+
       <Container>
         <h2>We Are Their Voice</h2>
         <p style={{ maxWidth: "400px" }}>
