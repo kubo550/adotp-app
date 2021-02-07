@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-
 import { useState } from "react";
 
 import Form from "../components/Form/Form";
