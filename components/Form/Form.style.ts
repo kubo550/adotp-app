@@ -1,7 +1,8 @@
-import styled from "styled-components"
-import { Paper } from "@material-ui/core"
+import { Paper } from "@material-ui/core";
+import styled from "styled-components";
+
 export const FormWrapper = styled.div`
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -12,8 +13,20 @@ export const FormWrapper = styled.div`
     background-color: rgba(0, 0, 0, 0.4);
 `;
 
-export const StyledPaperForm = styled(Paper)`
-    max-width: 500px;
-    padding: 40px;
-    text-align:center;
-`;
+
+export const StyledPaper = styled(Paper)`
+    width: 320px;
+    padding: 30px;
+    margin: 0 auto;
+    border-radius: 12px;
+
+    form {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items:center;
+        flex-direction: column;
+        min-height: 300px;
+    }
+
+`
