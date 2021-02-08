@@ -8,6 +8,8 @@ import { Button } from "@material-ui/core";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
+import Confetti from "react-confetti";
+
 export const Container = styled.div`
   height: 90vh;
   display: flex;
@@ -23,13 +25,16 @@ export const FlexDiv = styled.div`
 `;
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
+  const [confetti, setConfetti] = useState(false);
 
-  const handleCloseForm = (e: any) => {
-    if (e.target.classList.contains("close")) {
-      setOpen(false);
-    }
+  const closePopup = () => {
+    // if (e.target.classList.contains("close")) {
+    setOpenForm(false);
+    // }
   };
+  const onComplete = () => setConfetti(true);
+  const endConfetti = () => setConfetti(false);
 
   return (
     <motion.div
@@ -54,7 +59,7 @@ const Home = () => {
           <Button
             variant='contained'
             color='primary'
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenForm(true)}
           >
             adopt
           </Button>
@@ -66,7 +71,16 @@ const Home = () => {
             </a>
           </Link>
         </FlexDiv>
-        {open && <Form handleCloseForm={handleCloseForm} />}
+        {openForm && (
+          <Form
+            complete={onComplete}
+            endConfetti={endConfetti}
+            closePopup={closePopup}
+          />
+        )}
+        {confetti && (
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+        )}
       </Container>
     </motion.div>
   );
