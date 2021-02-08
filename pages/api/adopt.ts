@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import fs from "fs/promises"
 import nodemailer from "nodemailer";
+import Nedb from "nedb"
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") {
@@ -44,11 +44,13 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const saveUser = async (data) => {
-        await fs.writeFile('./db/users.json', JSON.stringify(data), "utf8");
+        const database = new Nedb('db/users.db');
+        database.loadDatabase();
+        database.insert({ ...data, createdAt: Date.now() })
     }
 
     sendMail(name, email).catch(console.error)
-    saveUser(req.body).catch(console.error)
+    saveUser(req.body)
 
     res.json({
         status: true,
