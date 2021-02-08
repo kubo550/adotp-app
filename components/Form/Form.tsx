@@ -1,60 +1,68 @@
-import React from "react";
-import { Grid, Typography, Button, TextField } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import { useForm, FormProvider } from "react-hook-form";
-import { Controller, useFormContext } from "react-hook-form";
 import axios from "axios";
-import { FormWrapper, StyledPaperForm } from "./Form.style";
+
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+// @ts-ignore
+import Swal from "sweetalert2";
+
+import { FormWrapper, StyledPaper } from "./Form.style";
+import { CustomTextField } from "./CustomTextField/CustomTextField";
 
 const schema = yup.object().shape({
   name: yup
     .string()
-    .matches(/^([^0-9]*)$/, "Name should not contain numbers")
-    .required("Name is required"),
-  email: yup
-    .string()
-    .email("Invalide email provided")
-    .required("Email adress is eequired"),
+    .min(3, "Name must be longer than 3 chars")
+    .matches(/^([^0-9]*)$/, "Name shoud not contains a numbers")
+    .required("Name is Required"),
+  email: yup.string().email().required("Adress e-mail is required"),
 });
 
 type FormProps = {
-  handleCloseForm: (e: any) => void;
+  closePopup: () => void;
+  complete: () => void;
+  endConfetti: () => void;
 };
 
-const Form: React.FC<FormProps> = ({ handleCloseForm }) => {
+const Form: React.FC<FormProps> = ({ closePopup, complete, endConfetti }) => {
   const methods = useForm({
+    // @ts-ignore
+    defaultValues: { name: "", email: "" },
     mode: "onBlur",
     resolver: yupResolver(schema),
-
-    // @ts-ignore
-    defaultValues: {
-      name: "",
-      email: "",
-    },
   });
-  type InputsValues = {
-    name: string;
-    email: string;
-  };
-  const handleSubmit = async (data: InputsValues) => {
-    const res = await axios.post(`http://localhost:3000/api/adopt`, data);
+
+  const onSubmit = methods.handleSubmit(async data => {
+    const res = await axios.post(`http://localhost:3000/api/adopt`, {
+      name: data.name.trim(),
+      email: data.email.trim(),
+    });
     if (res.status === 200) {
       console.log(res.data);
       // TODO REDIRECT
       // Router.push({ pathname: "/thanks" });
     }
-  };
+    Swal.fire(
+      `Good Job ${data.name}!`,
+      "Thanks to you some poppies will found a new home 🐩",
+      "success"
+    ).then(() => endConfetti());
+    console.log(data);
+    complete();
+    closePopup();
+  });
 
   return (
-    <FormWrapper className='close' onClick={handleCloseForm}>
-      <StyledPaperForm elevation={4}>
+    <FormWrapper>
+      <StyledPaper elevation={3}>
+        <Typography variant='h5' component='h3' align='center'>
+          Confirm Adoption Form
+        </Typography>
+
         <Grid container spacing={3}>
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(handleSubmit)}>
-              <Typography variant='h5' align='center'>
-                Become a Hero
-              </Typography>
+            <form autoComplete='off' onSubmit={onSubmit}>
               <CustomTextField
                 name='name'
                 label='Full Name'
@@ -74,47 +82,13 @@ const Form: React.FC<FormProps> = ({ handleCloseForm }) => {
                 color='secondary'
                 fullWidth
               >
-                potwierdź
+                Submit
               </Button>
             </form>
           </FormProvider>
         </Grid>
-      </StyledPaperForm>
+      </StyledPaper>
     </FormWrapper>
   );
 };
-
 export default Form;
-
-type CTFProps = {
-  name: string;
-  label: string;
-  isError: boolean;
-  message: string;
-  email?: boolean;
-};
-
-export const CustomTextField: React.FC<CTFProps> = ({
-  name,
-  label,
-  email,
-  isError,
-  message,
-}) => {
-  const { control } = useFormContext();
-  return (
-    <Grid item xs={12}>
-      <Controller
-        as={TextField}
-        control={control}
-        name={name}
-        label={label}
-        required
-        fullWidth
-        type={email ? "email" : "text"}
-        error={isError}
-        helperText={message}
-      ></Controller>
-    </Grid>
-  );
-};
