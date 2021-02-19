@@ -1,7 +1,7 @@
 # Next Dog Shelter
 
 
-Simple app in **Next.js** with **TypeScript** 
+Simple app in **Next.js** with **TypeScript** mainly writen in backend.
 
 
 ## preview 
